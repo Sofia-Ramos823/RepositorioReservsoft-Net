@@ -1,0 +1,164 @@
+﻿@model reservsoft.Models.Reservas
+@{
+    ViewData["Title"] = "Crear Reserva";
+}
+
+<div class="create-form">
+    <h1>Crear Reserva</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create" id="reservaForm">
+                <!-- Mostrar errores globales (del modelo) -->
+                <div asp-validation-summary="ModelOnly" class="text-danger validation-summary">
+                    <i class="fas fa-exclamation-triangle"></i> Hay errores en el formulario.
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Cliente" class="control-label">Nombre</label>
+                    <input asp-for="Cliente" class="form-control" />
+                    <span asp-validation-for="Cliente" class="text-danger error-message"></span> <!-- Mensaje de error para Cliente -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Apellido" class="control-label">Apellido</label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger error-message"></span> <!-- Mensaje de error para Apellido -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TipoDoc" class="control-label">Tipo de Documento</label>
+                    <select asp-for="TipoDoc" class="form-control">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <span asp-validation-for="TipoDoc" class="text-danger error-message"></span> <!-- Mensaje de error para TipoDoc -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="NumDoc" class="control-label">Número de Documento</label>
+                    <input asp-for="NumDoc" class="form-control" />
+                    <span asp-validation-for="NumDoc" class="text-danger error-message"></span> <!-- Mensaje de error para NumDoc -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Acompanantes" class="control-label">Acompañantes</label>
+                    <input asp-for="Acompanantes" class="form-control" />
+                    <span asp-validation-for="Acompanantes" class="text-danger error-message"></span> <!-- Mensaje de error para Acompanantes -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Estado" class="control-label">Estado de la Reserva</label>
+                    <select asp-for="Estado" class="form-control">
+                        <option value="">Seleccione un estado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmado">Confirmado</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                    <span asp-validation-for="Estado" class="text-danger error-message"></span> <!-- Mensaje de error para Estado -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FInicio" class="control-label">Fecha de Inicio</label>
+                    <input asp-for="FInicio" class="form-control" type="date" />
+                    <span asp-validation-for="FInicio" class="text-danger error-message"></span> <!-- Mensaje de error para FInicio -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FFin" class="control-label">Fecha de Fin</label>
+                    <input asp-for="FFin" class="form-control" type="date" />
+                    <span asp-validation-for="FFin" class="text-danger error-message"></span> <!-- Mensaje de error para FFin -->
+                </div>
+
+                <div class="form-group">
+                    <label>Apartamentos</label>
+                    <select asp-for="ApartamentoIds"
+                            asp-items="ViewBag.Apartamentos"
+                            class="form-control select2"
+                            multiple="multiple">
+                    </select>
+                    <span asp-validation-for="ApartamentoIds" class="text-danger error-message"></span> <!-- Mensaje de error para ApartamentoIds -->
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TotalReserva" class="control-label">Total de la Reserva</label>
+                    <input asp-for="TotalReserva" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Crear Reserva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(function () {
+            $('.select2').select2({
+                placeholder: "Seleccione los apartamentos",
+                allowClear: true
+            });
+
+            function calcularTotal() {
+                var apartamentoIds = $('#ApartamentoIds').val();
+                var fInicio = $('#FInicio').val();
+                var fFin = $('#FFin').val();
+
+                if (apartamentoIds && apartamentoIds.length > 0 && fInicio && fFin) {
+                    $.ajax({
+                        url: '@Url.Action("CalcularTotal", "Reservas")',
+                        type: 'POST',
+                        data: {
+                            apartamentoIds: apartamentoIds,
+                            fInicio: fInicio,
+                            fFin: fFin
+                        },
+                        success: function (result) {
+                            $('#TotalReserva').val(result.rawValue);
+                        }
+                    });
+                }
+            }
+
+            $('#ApartamentoIds, #FInicio, #FFin').on('change', calcularTotal);
+        });
+    </script>
+}
+
+<style>
+    .validation-summary {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .error-message {
+        display: block;
+        color: #721c24;
+        padding: 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+
+        .error-message i {
+            margin-right: 5px;
+        }
+</style>

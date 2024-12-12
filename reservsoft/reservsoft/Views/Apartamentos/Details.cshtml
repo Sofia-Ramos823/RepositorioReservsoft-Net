@@ -1,0 +1,191 @@
+﻿@model reservsoft.Models.Apartamentos
+
+@{
+    ViewData["Title"] = "Detalles del Apartamento";
+}
+
+<div class="create-form">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <h4>Información del Apartamento</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TipoApartamento)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.TipoApartamento)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Capacidad)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Capacidad)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Tamaño)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Tamaño)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Piso)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Piso)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Tarifa)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Tarifa)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.IdApartamento" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#mobiliariosModal">
+            Ver Mobiliario
+        </button>
+    </div>
+</div>
+
+<!-- Modal para mostrar mobiliarios -->
+<div class="modal fade" id="mobiliariosModal" tabindex="-1" role="dialog" aria-labelledby="mobiliariosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mobiliariosModalLabel">Mobiliario del Apartamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Identificación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mobiliariosTableBody">
+                        <!-- Mobiliarios se cargarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para seleccionar nuevo estado -->
+<div class="modal fade" id="cambiarEstadoModal" tabindex="-1" role="dialog" aria-labelledby="cambiarEstadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cambiarEstadoModalLabel">Cambiar Estado del Mobiliario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nuevoEstado">Seleccione el nuevo estado:</label>
+                    <select class="form-control" id="nuevoEstado">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        <option value="Mantenimiento">Mantenimiento</option>
+                        <option value="Transferido">Transferido</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarEstado">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Cargar mobiliarios en el modal
+            $('#mobiliariosModal').on('show.bs.modal', function (e) {
+                $.ajax({
+                    url: '@Url.Action("GetMobiliarios", "Apartamentos", new { id = Model.IdApartamento })',
+                    type: 'GET',
+                    success: function (data) {
+                        $('#mobiliariosTableBody').empty();
+                        $.each(data, function (i, item) {
+                            var row = '<tr>' +
+                                '<td>' + item.nombre + '</td>' +
+                                '<td>' + item.identMobiliario + '</td>' +
+                                '<td>' + item.estado + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-sm btn-primary cambiar-estado" data-id="' + item.idMobiliario + '">Cambiar Estado</button> ' +
+                                '<button class="btn btn-sm btn-secondary transferir" data-id="' + item.idMobiliario + '">Transferir</button>' +
+                                '</td>' +
+                                '</tr>';
+                            $('#mobiliariosTableBody').append(row);
+                        });
+                    }
+                });
+            });
+
+            // Cambiar estado del mobiliario
+            $(document).on('click', '.cambiar-estado', function () {
+                var idMobiliario = $(this).data('id');
+
+                // Mostrar el modal para cambiar el estado
+                $('#cambiarEstadoModal').modal('show');
+
+                // Al hacer clic en "Guardar", cambiar el estado
+                $('#guardarEstado').off('click').on('click', function () {
+                    var nuevoEstado = $('#nuevoEstado').val();
+                    $.ajax({
+                        url: '@Url.Action("CambiarEstadoMobiliario", "Apartamentos")',
+                        type: 'POST',
+                        data: { idMobiliario: idMobiliario, nuevoEstado: nuevoEstado },
+                        success: function (result) {
+                            if (result.success) {
+                                alert('Estado cambiado con éxito');
+                                $('#cambiarEstadoModal').modal('hide');
+                                $('#mobiliariosModal').modal('hide');
+                            } else {
+                                alert('Error al cambiar el estado');
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Transferir mobiliario
+            $(document).on('click', '.transferir', function () {
+                var idMobiliario = $(this).data('id');
+                var nuevoIdApartamento = prompt("Ingrese el ID del nuevo apartamento:");
+                if (nuevoIdApartamento) {
+                    $.ajax({
+                        url: '@Url.Action("TransferirMobiliario", "Apartamentos")',
+                        type: 'POST',
+                        data: { idMobiliario: idMobiliario, nuevoIdApartamento: nuevoIdApartamento },
+                        success: function (result) {
+                            if (result.success) {
+                                alert('Mobiliario transferido con éxito');
+                                $('#mobiliariosModal').modal('hide');
+                            } else {
+                                alert('Error al transferir el mobiliario');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

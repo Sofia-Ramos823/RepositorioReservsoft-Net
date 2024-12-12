@@ -1,0 +1,89 @@
+﻿@model reservsoft.Models.Reservas
+
+@{
+    ViewData["Title"] = "Detalles de la Reserva";
+}
+
+<div class="create-form">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <h4>Información de la Reserva</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Cliente)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Cliente)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Apellido)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Apellido)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TipoDoc)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.TipoDoc)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.NumDoc)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NumDoc)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Acompanantes)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Acompanantes)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FechaReserva)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FechaReserva)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FInicio)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FInicio)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FFin)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FFin)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Estado)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TotalReserva)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.TotalReserva)
+            </dd>
+        </dl>
+
+        <h5>Apartamentos Reservados:</h5>
+        <ul class="list-group">
+            @foreach (var apartamento in Model.Apartamentos)
+            {
+                <li class="list-group-item">@apartamento.TipoApartamento</li>
+            }
+        </ul>
+    </div>
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model.NumReserva" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+﻿@model reservsoft.Models.Apartamentos
+
+@{
+    ViewData["Title"] = "Editar Apartamento";
+}
+
+<div class="create-form">
+    <h1>@ViewData["Title"]</h1>
+
+    <h4>Apartamentos</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdApartamento" />
+                <div class="form-group">
+                    <label asp-for="TipoApartamento" class="control-label">Tipo de Apartamento</label>
+                    <input asp-for="TipoApartamento" class="form-control" />
+                    <span asp-validation-for="TipoApartamento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descripcion" class="control-label">Descripción</label>
+                    <input asp-for="Descripcion" class="form-control" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Capacidad" class="control-label">Capacidad</label>
+                    <input asp-for="Capacidad" class="form-control" />
+                    <span asp-validation-for="Capacidad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tamaño" class="control-label">Tamaño</label>
+                    <input asp-for="Tamaño" class="form-control" />
+                    <span asp-validation-for="Tamaño" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Piso" class="control-label">Piso</label>
+                    <input asp-for="Piso" class="form-control" />
+                    <span asp-validation-for="Piso" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tarifa" class="control-label">Tarifa</label>
+                    <input asp-for="Tarifa" class="form-control" />
+                    <span asp-validation-for="Tarifa" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

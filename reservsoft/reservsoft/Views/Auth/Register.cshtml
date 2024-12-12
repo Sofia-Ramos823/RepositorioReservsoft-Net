@@ -1,0 +1,196 @@
+﻿@model reservsoft.Models.Usuario
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<link rel="stylesheet" href="../assets/css/styles.min.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+
+<style>
+    body {
+        background-color: #e0e0e0;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        background-color: #2c2c2c;
+        color: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body h2 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #00a859;
+    }
+
+    .btn-primary {
+        padding: 8px 0;
+        font-size: 14px;
+        background-color: #00a859;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #008746;
+        }
+
+    .form-control {
+        background-color: #333;
+        color: white;
+        border: 1px solid #444;
+        border-radius: 5px;
+    }
+
+    .form-label {
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .input-group-text {
+        cursor: pointer;
+    }
+
+    /* Evitar el parpadeo del cursor en los campos de entrada */
+    .form-control:focus {
+        outline: none;
+        box-shadow: none;
+    }
+</style>
+
+<div class="d-flex align-items-center justify-content-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <a href="~/img/nidosky.jpg" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                    <img src="@Url.Content("~/img/nidosky.jpg")" width="180" alt="Nido Sky" />
+                </a>
+
+                <form asp-action="Register" method="post" id="registrationForm">
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label">Nombre</label>
+                        <input asp-for="Nombre" class="form-control" id="Nombre" type="text" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Correo electrónico</label>
+                        <input asp-for="Email" class="form-control" id="Email" type="email" />
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <input asp-for="Password" class="form-control" id="Password" type="password" />
+                            <span class="input-group-text" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="ConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                        <div class="input-group">
+                            <input id="ConfirmPassword" name="confirmPassword" class="form-control" type="password" />
+                            <span class="input-group-text" id="toggleConfirmPassword">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("registrationForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const nombre = document.getElementById("Nombre").value.trim();
+        const email = document.getElementById("Email").value.trim();
+        const password = document.getElementById("Password").value.trim();
+        const confirmPassword = document.getElementById("ConfirmPassword").value.trim();
+
+        if (!nombre) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campo requerido',
+                text: 'Por favor, ingresa tu nombre.',
+            });
+            return;
+        }
+
+        if (!email) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campo requerido',
+                text: 'Por favor, ingresa tu correo electrónico.',
+            });
+            return;
+        }
+
+        if (!password) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campo requerido',
+                text: 'Por favor, ingresa tu contraseña.',
+            });
+            return;
+        }
+
+        if (!confirmPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campo requerido',
+                text: 'Por favor, confirma tu contraseña.',
+            });
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Contraseña no coincide',
+                text: 'Las contraseñas no coinciden. Verifícalas.',
+            });
+            return;
+        }
+
+        // Si todo está bien, envía el formulario
+        this.submit();
+
+        // Notificación de éxito con SweetAlert2
+        Swal.fire({
+            icon: 'success',
+            title: 'Registro exitoso',
+            text: 'Tu cuenta ha sido creada con éxito.',
+            confirmButtonText: 'Ir al inicio de sesión'
+        }).then(() => {
+            window.location.href = 'https://localhost:7221/Auth/Login'; // Redirige al login
+        });
+    });
+
+    // Función para mostrar u ocultar la contraseña
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordField = document.getElementById("Password");
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        this.querySelector("i").classList.toggle("bi-eye-slash");
+    });
+
+    document.getElementById("toggleConfirmPassword").addEventListener("click", function () {
+        const confirmPasswordField = document.getElementById("ConfirmPassword");
+        const type = confirmPasswordField.type === "password" ? "text" : "password";
+        confirmPasswordField.type = type;
+        this.querySelector("i").classList.toggle("bi-eye-slash");
+    });
+</script>

@@ -1,0 +1,99 @@
+﻿@model reservsoft.Models.Descuento
+
+@{
+    ViewData["Title"] = "Crear Descuento";
+}
+
+<div class="create-form">
+    <h1>@ViewData["Title"]</h1>
+
+    <h4>Descuento</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="IdApartamento" class="control-label">Apartamento</label>
+                    <select asp-for="IdApartamento" class="form-control" asp-items="ViewBag.IdApartamento">
+                        <option value="">-- Seleccione un Apartamento --</option>
+                    </select>
+                    <span asp-validation-for="IdApartamento" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Descripcion" class="control-label">Descripción</label>
+                    <input asp-for="Descripcion" class="form-control" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Precio" class="control-label">Precio</label>
+                    <input id="Precio" asp-for="Precio" class="form-control" />
+                    <span asp-validation-for="Precio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Descuentos" class="control-label">Porcentaje de Descuento</label>
+                    <input id="Descuentos" asp-for="Descuentos" class="form-control" />
+                    <span asp-validation-for="Descuentos" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PrecioConDescuento" class="control-label">Precio con Descuento</label>
+                    <input id="PrecioConDescuento" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FechaInicio" class="control-label">Fecha de Inicio</label>
+                    <input asp-for="FechaInicio" class="form-control" type="date" />
+                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FechaFin" class="control-label">Fecha de Fin</label>
+                    <input asp-for="FechaFin" class="form-control" type="date" />
+                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function calcularPrecioConDescuento() {
+            var precio = parseFloat(document.getElementById('Precio').value);
+            var descuento = parseFloat(document.getElementById('Descuentos').value);
+
+            if (!isNaN(precio) && !isNaN(descuento)) {
+                var precioConDescuento = precio - (precio * descuento / 100);
+                document.getElementById('PrecioConDescuento').value = precioConDescuento.toFixed(2);
+            } else {
+                document.getElementById('PrecioConDescuento').value = '';
+            }
+        }
+
+        document.getElementById('Precio').addEventListener('input', calcularPrecioConDescuento);
+        document.getElementById('Descuentos').addEventListener('input', calcularPrecioConDescuento);
+    </script>
+}

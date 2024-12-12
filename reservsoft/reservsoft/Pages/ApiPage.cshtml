@@ -1,0 +1,88 @@
+﻿@page
+@model ApiPageModel
+@{
+    ViewData["Title"] = "API Data";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descuentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f5a623;
+            color: #2c2c2c;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Descuentos</h1>
+    <table id="descuentos-table">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Descuento (%)</th>
+                <th>Precio con Descuento</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se insertarán las filas dinámicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        // Convierte el JSON a un objeto y genera dinámicamente la tabla
+        const apiData = @Html.Raw(Model.ApiData);
+
+        const tableBody = document.querySelector("#descuentos-table tbody");
+
+        apiData.forEach(descuento => {
+            const row = `
+                <tr>
+                    <td>${descuento.descripcion}</td>
+                    <td>${descuento.precio}</td>
+                    <td>${descuento.descuento}</td>
+                    <td>${descuento.precioDescuento}</td>
+                    <td>${new Date(descuento.fechaini).toLocaleDateString()}</td>
+                    <td>${new Date(descuento.fechafin).toLocaleDateString()}</td>
+                    <td>${descuento.estado}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+    </script>
+</body>
+</html>

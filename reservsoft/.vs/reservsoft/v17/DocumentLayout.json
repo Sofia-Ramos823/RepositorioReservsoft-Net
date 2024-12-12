@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\.net\\reservsoft\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|c:\\.net\\reservsoft\\reservsoft\\views\\apartamentos\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|solutionrelative:reservsoft\\views\\apartamentos\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|c:\\.net\\reservsoft\\reservsoft\\views\\descuentoes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|solutionrelative:reservsoft\\views\\descuentoes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|c:\\.net\\reservsoft\\reservsoft\\controllers\\apartamentoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55146D53-D4A7-458F-B3F6-5D21E983FF11}|reservsoft\\reservsoft.csproj|solutionrelative:reservsoft\\controllers\\apartamentoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 62,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\.net\\reservsoft\\reservsoft\\Views\\Descuentoes\\Index.cshtml",
+              "RelativeDocumentMoniker": "reservsoft\\Views\\Descuentoes\\Index.cshtml",
+              "ToolTip": "C:\\.net\\reservsoft\\reservsoft\\Views\\Descuentoes\\Index.cshtml",
+              "RelativeToolTip": "reservsoft\\Views\\Descuentoes\\Index.cshtml",
+              "ViewState": "AgIAACgAAAAAAAAAAAAkwCoAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-12T01:36:51.584Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApartamentosController.cs",
+              "DocumentMoniker": "C:\\.net\\reservsoft\\reservsoft\\Controllers\\ApartamentosController.cs",
+              "RelativeDocumentMoniker": "reservsoft\\Controllers\\ApartamentosController.cs",
+              "ToolTip": "C:\\.net\\reservsoft\\reservsoft\\Controllers\\ApartamentosController.cs",
+              "RelativeToolTip": "reservsoft\\Controllers\\ApartamentosController.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAMgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T13:45:35.941Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\.net\\reservsoft\\reservsoft\\Views\\Apartamentos\\Index.cshtml",
+              "RelativeDocumentMoniker": "reservsoft\\Views\\Apartamentos\\Index.cshtml",
+              "ToolTip": "C:\\.net\\reservsoft\\reservsoft\\Views\\Apartamentos\\Index.cshtml",
+              "RelativeToolTip": "reservsoft\\Views\\Apartamentos\\Index.cshtml",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAAAEwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-11T13:44:42.64Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

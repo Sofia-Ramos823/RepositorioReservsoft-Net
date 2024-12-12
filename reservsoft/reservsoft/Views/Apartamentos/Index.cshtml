@@ -1,0 +1,242 @@
+﻿@model IEnumerable<reservsoft.Models.Apartamentos>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+@{
+    ViewData["Title"] = "Apartamentos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<input type="hidden" id="RequestVerificationToken"
+       name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="text-center flex-grow-1 text-dark" style="font-size: 1.5rem;"><i class="bi bi-building"></i> Apartamentos</h1>
+        <a asp-action="Create" class="btn btn-warning btn-sm"><i class="bi bi-plus-circle"></i> Crear nuevo apartamento</a>
+    </div>
+    <div class="mb-3" id="export-buttons"></div>
+    <table class="table table-bordered table-striped table-hover table-sm text-center w-100" id="example" style="background-color: #2c2c2c; color: #fff; border-radius: 8px;">
+        <thead style="background-color: #f5a623; color: black;">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.TipoApartamento)</th>
+                <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                <th>@Html.DisplayNameFor(model => model.Capacidad)</th>
+                <th>@Html.DisplayNameFor(model => model.Tamaño)</th>
+                <th>@Html.DisplayNameFor(model => model.Piso)</th>
+                <th>@Html.DisplayNameFor(model => model.Tarifa)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody style="background-color: #f9f9f9; color: #333;">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.TipoApartamento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Capacidad)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Tamaño)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Piso)</td>
+                    <td>@item.Tarifa.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("es-CO"))</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.IdApartamento" class="btn btn-primary btn-sm" style="padding: 0.25rem 0.5rem;">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.IdApartamento" class="btn btn-success btn-sm" style="padding: 0.25rem 0.5rem;">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <button onclick="confirmDelete(@item.IdApartamento)" class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem;">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+ 
+    .boton-accion {
+        padding: 5px 10px;
+        margin: 0 2px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .boton-copiar {
+        background-color: aqua;
+    }
+
+    .boton-csv {
+        background-color: aquamarine;
+    }
+
+    .boton-excel {
+        background-color: lightgreen;
+    }
+
+    .boton-pdf {
+        background-color: lightcoral;
+    }
+
+    .boton-print {
+        background-color: lightgoldenrodyellow;
+    }
+
+    .boton-colvis {
+        background-color: lightsalmon;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script>
+        // Mostrar mensaje de error
+        const errorMessage = '@TempData["ErrorMessage"]';
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+            });
+        }
+
+        // Mostrar mensaje de éxito
+        const successMessage = '@TempData["SuccessMessage"]';
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: successMessage,
+            });
+        }
+
+        // Función para confirmar y eliminar un apartamento
+        function confirmDelete(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "No podrás revertir esta acción!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteApartamento(id);
+                }
+            });
+        }
+
+        // Función para eliminar un apartamento
+        function deleteApartamento(id) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Apartamentos")/' + id,
+                type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('#RequestVerificationToken').val()
+                },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado!',
+                            text: result.message,
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: result.message,
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Ocurrió un error al intentar eliminar el apartamento.',
+                    });
+                }
+            });
+        }
+
+        // Configuración de DataTable con paginado
+        new DataTable('#example', {
+            paging: true,
+            pageLength: 10,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: '<i class="fas fa-copy"></i>',
+                    className: 'boton-accion boton-copiar',
+                    titleAttr: 'Copiar'
+                },
+                {
+                    extend: 'csv',
+                    text: '<i class="fas fa-file-csv"></i>',
+                    className: 'boton-accion boton-csv',
+                    titleAttr: 'Exportar CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fas fa-file-excel"></i>',
+                    className: 'boton-accion boton-excel',
+                    titleAttr: 'Exportar Excel',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="fas fa-file-pdf"></i>',
+                    className: 'boton-accion boton-pdf',
+                    titleAttr: 'Exportar PDF',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fas fa-print"></i>',
+                    className: 'boton-accion boton-print',
+                    titleAttr: 'Imprimir'
+                },
+                {
+                    extend: 'colvis',
+                    text: '<i class="fas fa-filter"></i>',
+                    className: 'boton-accion boton-colvis',
+                    titleAttr: 'Filtrar'
+                }
+            ],
+            scrollX: true,
+            initComplete: function (settings, json) {
+                this.api().buttons().container().appendTo('#export-buttons');
+                $(".dt-buttons").removeClass("dt-buttons");
+                $(".dt-button").addClass("botones");
+            }
+        });
+    </script>
+}
+

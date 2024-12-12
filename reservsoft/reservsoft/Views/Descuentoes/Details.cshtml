@@ -1,0 +1,57 @@
+﻿@model reservsoft.Models.Descuento
+
+@{
+    ViewData["Title"] = "Detalles del Descuento";
+}
+
+<div class="create-form">
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <h4>Información del Descuento</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Precio)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Precio)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Descuentos)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Descuentos)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FechaInicio)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FechaFin)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FechaFin)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Estado)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="button-group">
+        <a asp-action="Edit" asp-route-id="@Model?.IdDescuento" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn-back">Volver a la Lista</a>
+    </div>
+</div>
